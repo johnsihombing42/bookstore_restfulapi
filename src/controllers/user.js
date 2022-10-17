@@ -5,7 +5,7 @@ module.exports = {
   registerUser: async (req, res, next) => {
     try {
       const { username, password } = req.body;
-      const exixtUser = await user.findOne({
+      const existUser = await user.findOne({
         where: { username: username },
       });
       if (existUser) {
@@ -14,6 +14,21 @@ module.exports = {
           message: "Username already used",
         });
       }
-    } catch {}
+      const encryptedPass = await bcrypt.hash(password, 10);
+      const encryptedUser = await user.create({
+        username,
+        password: encryptedPass,
+      });
+
+      return res.status(201).json({
+        status: "OK",
+        message: "Register user success",
+        data: {
+          user: encryptedUser,
+        },
+      });
+    } catch {
+      next(err);
+    }
   },
 };
