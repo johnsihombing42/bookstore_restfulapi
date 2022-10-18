@@ -1,4 +1,4 @@
-// const user = require("./user");
+const user = require("./user");
 const auth = require("./auth");
 
-module.exports = { auth };
+module.exports = { auth, user };
