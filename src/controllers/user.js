@@ -1,8 +1,10 @@
 const { user } = require("../db/models");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
+const { JWT_SIGNATURE_KEY } = process.env;
+
 module.exports = {
-  registerUser: async (req, res, next) => {
+  register: async (req, res, next) => {
     try {
       const { username, password } = req.body;
       const existUser = await user.findOne({
@@ -27,7 +29,49 @@ module.exports = {
           user: encryptedUser,
         },
       });
-    } catch {
+    } catch (err) {
+      next(err);
+    }
+  },
+  //autentikasi login
+  login: async (req, res, next) => {
+    try {
+      const { username, password } = req.body;
+
+      const userData = await user.findOne({
+        where: { username: username },
+      });
+
+      if (!userData) {
+        return res.status(400).json({
+          status: false,
+          message: "email or password doesn't match!",
+        });
+      }
+
+      const correct = await bcrypt.compare(password, userData.password);
+      if (!correct) {
+        return res.status(400).json({
+          status: false,
+          message: "email or password doesn't match!",
+        });
+      }
+
+      // generate token
+      payload = {
+        username: user.username,
+        password: user.password,
+      };
+      const token = jwt.sign(payload, JWT_SIGNATURE_KEY);
+
+      return res.status(200).json({
+        status: "OK",
+        message: "success",
+        data: {
+          token: token,
+        },
+      });
+    } catch (err) {
       next(err);
     }
   },
