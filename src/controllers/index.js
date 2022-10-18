@@ -1,2 +1,4 @@
-const user = require("./user");
-module.exports = { user };
+// const user = require("./user");
+const auth = require("./auth");
+
+module.exports = { auth };

@@ -3,7 +3,7 @@ const router = express.Router();
 const userController = require("../controllers");
 const middleware = require("../helper/middleware");
 
-router.post("/register", userController.user.register);
-router.post("/login", userController.user.login);
-router.post("/change-password/:id", userController.user.changePassword);
+router.post("/register", userController.auth.register);
+router.post("/login", userController.auth.login);
+router.post("/change-password/:id", userController.auth.changePassword);
 module.exports = router;
