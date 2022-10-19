@@ -13,4 +13,10 @@ module.exports = {
       next(err);
     }
   },
+  update: async (req, res, next) => {
+    try {
+      const { username, password } = req.body;
+      const { id } = req.params;
+    } catch {}
+  },
 };
