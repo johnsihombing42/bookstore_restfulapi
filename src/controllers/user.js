@@ -17,6 +17,34 @@ module.exports = {
     try {
       const { username, password } = req.body;
       const { id } = req.params;
-    } catch {}
+      const newuser = await user.findOne({ where: { id: id } });
+
+      if (!newuser) {
+        return res.status(400).json({
+          status: false,
+          message: "Data Not Found",
+        });
+      }
+      const encryptedPassword = await bcrypt.hash(password, 10);
+      const user = await user.update(
+        {
+          username,
+          password: encryptedPassword,
+        },
+        {
+          where: { id: id },
+        }
+      );
+      return res.status(200).json({
+        status: "success",
+        mesage: "Update data success",
+        data: {
+          username: user.username,
+          password: user.password,
+        },
+      });
+    } catch (err) {
+      next(err);
+    }
   },
 };
