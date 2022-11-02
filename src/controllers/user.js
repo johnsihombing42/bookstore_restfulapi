@@ -47,4 +47,18 @@ module.exports = {
       next(err);
     }
   },
+  delete: async (req, res) => {
+    try {
+      const { userId } = req.params;
+      const user = await user.destroy({
+        where: { id: userId },
+      });
+      return res.status(200).json({
+        status: "success",
+        mesage: "Delete data success",
+      });
+    } catch (err) {
+      next(err);
+    }
+  },
 };
