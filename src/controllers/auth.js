@@ -78,6 +78,7 @@ module.exports = {
       next(err);
     }
   },
+
   changePassword: async (req, res, next) => {
     try {
       const { oldPassword, newPassword, confirmNewPassword } = req.body;

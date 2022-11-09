@@ -16,7 +16,7 @@ module.export = {
 
       const newBook = await book.create({
         title,
-        desciption,
+        description,
         author,
         publisher,
       });
@@ -30,6 +30,27 @@ module.export = {
           author: newBook.author,
           publisher: newBook.publisher,
         },
+      });
+    } catch (err) {
+      next(err);
+    }
+  },
+
+  read: async (req, res) => {
+    try {
+      const bookData = await book.findAll();
+      if (bookData.length <= 0) {
+        res.status(404).json({
+          status: false,
+          message: "data was not-found",
+          data: null,
+        });
+      }
+
+      return res.status(200).json({
+        status: "success",
+        mesage: "Read all data",
+        data: bookData,
       });
     } catch (err) {
       next(err);
