@@ -56,4 +56,32 @@ module.export = {
       next(err);
     }
   },
+
+  update: async (req, res) => {
+    try {
+      const { title, description, author, publisher } = req.body;
+      const { id } = req.params;
+      const bookData = await book.findOne({ where: { id: id } });
+
+      if (!bookData) {
+        return res.status(400).json({
+          status: false,
+          message: "Data Not Found",
+        });
+      }
+
+      return res.status(200).json({
+        status: "success",
+        mesage: "Update data success",
+        data: {
+          title,
+          description,
+          author,
+          publisher,
+        },
+      });
+    } catch (err) {
+      next(err);
+    }
+  },
 };
